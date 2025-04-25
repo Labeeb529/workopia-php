@@ -1,0 +1,16 @@
+{
+    "name" : "labeeb529/workopia-php",
+    "description" : "Job Listing Application",
+    "authors" : [
+        {
+            "name" : "Labeeb",
+            "email" : "529labeeb@gmail.com"
+        }
+    ],
+    "autoload" : {
+        "psr-4": {
+            "Framework\\" : "Framework/",
+            "App\\" : "App/"
+        }
+    } 
+}

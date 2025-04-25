@@ -20,10 +20,11 @@ function basePath($path = '')
  * @return void
  */
 
- function loadView($name) {
-    $viewPath = basePath('views/' . $name . '.view.php');
+ function loadView($name, $data = []) {
+    $viewPath = basePath('App/views/' . $name . '.view.php');
 
     if(file_exists($viewPath)) {
+        extract($data);
         require $viewPath;
     } else {
         echo 'View ' . $viewPath . ' not found!';
@@ -39,7 +40,7 @@ function basePath($path = '')
  */
 
  function loadPartial($name) {
-    $partialPath =  basePath('views/partials/' . $name . '.php');
+    $partialPath =  basePath('App/views/partials/' . $name . '.php');
     
     if(file_exists($partialPath)) {
         require $partialPath;
@@ -75,4 +76,15 @@ function basePath($path = '')
     echo var_dump($value);
     echo '</pre>';
     die();
+ }
+
+/**
+ * Format Salary
+ * 
+ * @param string $salary
+ * @return string Formatted Salary
+ */
+
+ function formatSalary($salary) {
+    return '$' . number_format(floatval($salary));
  }
