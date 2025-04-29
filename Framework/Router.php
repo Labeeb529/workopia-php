@@ -2,6 +2,8 @@
 
 namespace Framework;
 
+use App\Controllers\ErrorController;
+
 class Router
 {
     protected $routes = [];
@@ -14,12 +16,12 @@ class Router
      * @param string $action
      * @return void
      */
-    
+
     public function registerRoute($method, $uri, $action)
     {
         list($controller, $controllerMethod) = explode('@', $action);
 
-        
+
 
         $this->routes[] = [
             'method' => $method,
@@ -82,19 +84,7 @@ class Router
         $this->registerRoute('DELETE', $uri, $controller);
     }
 
-    /**
-     * load Error page
-     * 
-     * @param int $httpCode
-     * @return void
-     */
 
-    public function error($httpCode = 404)
-    {
-        http_response_code($httpCode);
-        loadView('error/' . $httpCode);
-        exit;
-    }
 
     /**
      * Route the request to the appropriate controller
@@ -104,21 +94,52 @@ class Router
      * @return void
      */
 
-    public function route($uri, $method)
+    public function route($uri)
     {
+        $requestMethod = $_SERVER['REQUEST_METHOD'];
         foreach ($this->routes as $route) {
-            if ($route['uri'] === $uri && $route['method'] === $method) {
-                //Extract controller and controller method
-                $controller = 'App\\Controllers\\' . $route['controller'];
-                $controllerMethod = $route['controllerMethod'];
 
-                //Instantiate Conroller and call method
-                $controllerInstance = new $controller();
-                $controllerInstance->$controllerMethod();
-                return;
+
+            //Split current URI into segments
+            $uriSegments = explode('/', trim($uri, '/'));
+
+            //Split the route URI into segmeents
+            $routeSegments = explode('/', trim($route['uri'], '/'));
+
+            $match = true;
+
+            // Check if the number of segments matches
+            if (count($uriSegments) == count($routeSegments) && strtoupper($route['method'] === $requestMethod)) {
+                $params = [];
+
+                $match = true;
+
+                for ($i = 0; $i < count($uriSegments); $i++) {
+                    //if the uris do not match and there is no param
+                    if ($routeSegments[$i] !== $uriSegments[$i] && !preg_match('/\{(.+?)\}/', $routeSegments[$i])) {
+                        $match = false;
+                        break;
+                    }
+
+                    //check for the param and add to params array
+                    if (preg_match('/\{(.+?)\}/', $routeSegments[$i], $matches)) {
+                        $params[$matches[1]] = $uriSegments[$i];
+                    }
+                }
+
+                if ($match) {
+                    $controller = 'App\\Controllers\\' . $route['controller'];
+                    $controllerMethod = $route['controllerMethod'];
+
+                    //Instantiate Conroller and call method
+                    $controllerInstance = new $controller();
+                    $controllerInstance->$controllerMethod($params);
+                    return;
+                }
             }
         }
-        $this->error();
+
+        ErrorController::notFound();
     }
 
 }
