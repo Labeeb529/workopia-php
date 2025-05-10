@@ -97,8 +97,15 @@ class Router
     public function route($uri)
     {
         $requestMethod = $_SERVER['REQUEST_METHOD'];
-        foreach ($this->routes as $route) {
 
+        //Check for _method input
+        if ($requestMethod == 'POST' && isset($_POST['_method'])) {
+            //Override the request method with value of _method
+
+            $requestMethod = strtoupper($_POST['_method']);
+        }
+
+        foreach ($this->routes as $route) {
 
             //Split current URI into segments
             $uriSegments = explode('/', trim($uri, '/'));

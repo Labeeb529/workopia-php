@@ -88,3 +88,27 @@ function basePath($path = '')
  function formatSalary($salary) {
     return '$' . number_format(floatval($salary));
  }
+
+ /**
+  * Sanitize Data
+  * @param string $dirty
+  * @return string 
+  */
+
+function sanitize($dirty){
+    return htmlspecialchars(trim($dirty));
+}
+
+/**
+ * Redirect to a given url
+ * 
+ * @param string $url
+ * @return void
+ */
+
+ function redirect($url) {
+    header("Location: " . $url);
+    exit;
+}
+
+ 

@@ -12,6 +12,7 @@
                 <a href="/edit" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded">Edit</a>
                 <!-- Delete Form -->
                 <form method="POST">
+                    <input type="hidden" name="_method" value="delete">
                     <button type="submit"
                         class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded">Delete</button>
                 </form>
@@ -21,7 +22,7 @@
         <div class="p-4">
             <h2 class="text-xl font-semibold"><?= $listing->title ?></h2>
             <p class="text-gray-700 text-lg mt-2">
-            <?= $listing->description ?>
+                <?= $listing->description ?>
             </p>
             <ul class="my-4 bg-gray-100 p-4">
                 <li class="mb-2"><strong>Salary:</strong> <?= formatSalary($listing->salary) ?></li>
@@ -29,9 +30,11 @@
                     <strong>Location:</strong> <?= $listing->city ?>, <?= $listing->state ?>
                     <span class="text-xs bg-blue-500 text-white rounded-full px-2 py-1 ml-2">Local</span>
                 </li>
-                <li class="mb-2">
-                    <strong>Tags:</strong> <<?= $listing->tags ?>
-                </li>
+                <?php if (!empty($listing->tags)): ?>
+                    <li class="mb-2">
+                        <strong>Tags:</strong> <?= $listing->tags ?>
+                    </li>
+                <?php endif; ?>
             </ul>
         </div>
     </div>
@@ -44,11 +47,10 @@
             Job Requirements
         </h3>
         <p>
-            Bachelors degree in Computer Science or related field, 3+ years of
-            software development experience
+            <?= $listing->requirements ?>
         </p>
         <h3 class="text-lg font-semibold mt-4 mb-2 text-blue-500">Benefits</h3>
-        <p>Healthcare, 401(k) matching, flexible work hours</p>
+        <p><?= $listing->benefits ?></p>
     </div>
     <p class="my-5">
         Put "Job Application" as the subject of your email and attach your
