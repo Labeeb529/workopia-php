@@ -1,18 +1,14 @@
 <?php
 
-session_start();
-
 require __DIR__ . '/../vendor/autoload.php';
-require '../helpers.php';
 
 use Framework\Router;
+use Framework\Session;
 
-// spl_autoload_register(function($class) {
-//     $path = basePath('Framework/' . $class . '.php');
-//     if(file_exists($path)){
-//         require $path;
-//     }
-// });
+Session::start();
+
+require '../helpers.php';
+
 
 //Instantiating the router
  $router = new Router();

@@ -3,6 +3,7 @@
 namespace Framework;
 
 use App\Controllers\ErrorController;
+use Framework\Middleware\Authorize;
 
 class Router
 {
@@ -37,12 +38,13 @@ class Router
      * 
      * @param string $url   
      * @param string $controller
+     * @param array $middleware
      * @return void
      */
 
-    public function get($uri, $controller)
+    public function get($uri, $controller, $middleware = [])
     {
-        $this->registerRoute('GET', $uri, $controller);
+        $this->registerRoute('GET', $uri, $controller, $middleware);
     }
 
     /**
